@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GRANTED HUB | VIP Gaming Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="top-right-dock">
+    <button class="extra-small-btn" onclick="toggleDrawer()">
+      <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </button>
+  </div>
+
+  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+  <div class="side-drawer" id="sideDrawer">
+    <div class="drawer-header">
+      <span class="drawer-title">ACCOUNT</span>
+      <button class="drawer-close" onclick="toggleDrawer()">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="auth-card" id="authCardBox">
+        <div class="auth-title" id="authCardTitle">Account Access</div>
+        <div id="loginFormSection">
+          <div class="auth-input-group">
+            <input class="auth-input" id="loginEmail" type="email" placeholder="Gmail" />
+            <input class="auth-input" id="loginPassword" type="password" placeholder="Password" />
+          </div>
+          <button class="auth-btn" onclick="loginWithEmail()">LOGIN</button>
+          <p class="auth-switch-text">No account? <button class="auth-switch-link" onclick="toggleAuthMode('signup')">Sign up</button></p>
+        </div>
+        <div id="signupFormSection" style="display:none">
+          <div class="auth-input-group">
+            <input class="auth-input" id="signupUsername" type="text" placeholder="Username" />
+            <input class="auth-input" id="signupEmail" type="email" placeholder="Gmail" />
+            <input class="auth-input" id="signupPassword" type="password" placeholder="Password" />
+          </div>
+          <button class="auth-btn" onclick="registerWithEmail()">CREATE ACCOUNT</button>
+          <p class="auth-switch-text">Have account? <button class="auth-switch-link" onclick="toggleAuthMode('login')">Login</button></p>
+        </div>
+      </div>
+      <div class="user-profile-card" id="userProfileCard" style="display:none">
+        <div class="user-avatar" id="userAvatarText">U</div>
+        <div class="user-info">
+          <h4 id="userNameDisplay">User</h4>
+          <p id="userEmailDisplay"></p>
+          <button class="logout-link" onclick="logoutAccount()">Logout</button>
+        </div>
+      </div>
+      <div id="accountActions" style="display:none">
+        <div class="drawer-section-title">WALLET</div>
+        <div class="drawer-item">Balance: <span id="walletBalanceDisplay">₱0.00</span></div>
+        <button class="drawer-item" id="adminMenuBtn" style="display:none" onclick="openAdminPanel()">ADMIN PANEL</button>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="logo-box">
+      <div style="font-family:'Orbitron';font-size:48px;color:#ff2a4b;text-shadow:0 0 30px #ff2a4b">GH</div>
+    </div>
+    <h1 class="brand-title">GRANTED HUB</h1>
+    <p class="brand-sub">Premium Gaming Tools & VIP Access</p>
+    <a class="telegram-group-btn" href="https://t.me/GrandeeXM" target="_blank">JOIN TELEGRAM</a>
+  </header>
+
+  <section class="status-tracker-section">
+    <div class="status-header">
+      <div class="status-header-title">SYSTEM STATUS</div>
+      <div class="status-legend">
+        <span class="legend-item"><span class="legend-dot green"></span> Safe</span>
+        <span class="legend-item"><span class="legend-dot yellow"></span> Updating</span>
+        <span class="legend-item"><span class="legend-dot maintenance"></span> Maintenance</span>
+      </div>
+    </div>
+    <div class="status-table-list" id="statusTableListContainer"></div>
+  </section>
+
+  <div class="filter-container" id="categoryFilterContainer">
+    <button class="filter-btn active" onclick="filterCategory('all', this)">ALL PRODUCTS</button>
+  </div>
+
+  <div class="products-grid" id="productsGrid"></div>
+
+  <div class="admin-modal-overlay" id="adminModalOverlay">
+    <div class="admin-container">
+      <div class="admin-header">
+        <h2>ADMIN PANEL</h2>
+        <button class="close-btn" onclick="closeAdminPanel()">×</button>
+      </div>
+      <div class="admin-body">
+        <div class="admin-section-box">
+          <div class="admin-section-title">PRODUCT STATUS</div>
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Category</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="adminProductsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-alert-overlay" id="customAlertOverlay">
+    <div class="custom-alert-box" id="customAlertBox">
+      <div class="custom-alert-icon" id="customAlertIcon">OK</div>
+      <div class="custom-alert-title" id="customAlertTitle"></div>
+      <div class="custom-alert-message" id="customAlertMessage"></div>
+      <button class="custom-alert-ok" onclick="closeCustomAlert()">OK</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
