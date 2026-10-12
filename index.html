@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRANTED HUB | VIP Gaming Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    
+
+    
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="network-layer" aria-hidden="true"></div>
+
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- CUSTOM ALERT MODAL -->
+    <div class="custom-alert-overlay" id="customAlertOverlay">
+        <div class="custom-alert-box" id="customAlertBox">
+            <div class="custom-alert-icon" id="customAlertIcon">OK</div>
+            <div class="custom-alert-title" id="customAlertTitle">Success</div>
+            <div class="custom-alert-message" id="customAlertMessage">Message here</div>
+            <button class="custom-alert-ok" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
+
+    <!-- MOD INFO POPUP MODAL -->
+    <div class="mod-info-modal" id="modInfoModal">
+        <div class="mod-info-container">
+            <div class="mod-info-header">
+                <div class="mod-info-title-wrap">
+                    <img src="https://i.imgur.com/UpdKD5d.png" alt="Product Logo" class="mod-info-logo" id="modInfoModalLogo">
+                    <div class="mod-info-title" id="modInfoModalTitle">CyRaXMod Info</div>
+                </div>
+                <button class="close-btn" style="position:static;" onclick="closeModInfoModal()">&times;</button>
+            </div>
+            <div class="mod-info-body" id="modInfoModalBody">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+    </div>
+
+    <div class="top-right-dock">
+        <button class="extra-small-btn" id="hamburgerBtn" onclick="toggleDrawer()">
+            <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+    </div>
+
+    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+    <div class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <span class="drawer-title">GRANTED HUB MENU</span>
+            <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+        </div>
+        <div class="drawer-body">
+            
+            <div class="auth-card" id="authCardBox">
+                <div class="auth-title" id="authCardTitle">Account Access</div>
+                
+                <div id="loginFormSection">
+                    <div class="auth-input-group">
+                        <input type="email" id="loginEmail" class="auth-input" placeholder="Gmail Address">
+                        <input type="password" id="loginPassword" class="auth-input" placeholder="Password">
+                    </div>
+                    <div class="forgot-password-row">
+                        <a href="https://t.me/GrandeeXM?text=Hello%2C%20I%20forgot%20my%20password%20for%20my%20Granted%20Hub%20account." target="_blank" class="forgot-link">Forgot Password?</a>
+                    </div>
+                    <button class="auth-btn" onclick="loginWithEmail()">Log In</button>
+                    <div class="auth-switch-text">
+                        Don't have an account? <button class="auth-switch-link" onclick="toggleAuthMode('signup')">Sign up</button>
+                    </div>
+                </div>
+
+                <div id="signupFormSection" style="display: none;">
+                    <div class="auth-input-group">
+                        <input type="text" id="signupUsername" class="auth-input" placeholder="Username" oninput="this.classList.remove('error-field')">
+                        <input type="email" id="signupEmail" class="auth-input" placeholder="Gmail Address (@gmail.com)" oninput="this.classList.remove('error-field')">
+                        <input type="password" id="signupPassword" class="auth-input" placeholder="Password" oninput="this.classList.remove('error-field')">
+                    </div>
+                    <div class="password-requirements">
+                        <b>Account Requirements:</b><br>
+                        • Email must end with @gmail.com<br>
+                        • Username & Email must be unique<br>
+                        • Password: At least 6 characters, 1 uppercase letter, 1 number
+                    </div>
+                    <button class="auth-btn" onclick="registerWithEmail()">Sign Up</button>
+                    <div class="auth-switch-text">
+                        Already have an account? <button class="auth-switch-link" onclick="toggleAuthMode('login')">Log in</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-profile-card" id="userProfileCard">
+                <div class="user-avatar" id="userAvatarText">U</div>
+                <div class="user-info">
+                    <h4 id="userNameDisplay">VIP User</h4>
+                    <p id="userEmailDisplay">user@gmail.com</p>
+                    <button class="logout-link" onclick="logoutAccount()">Sign out</button>
+                </div>
+            </div>
+
+            <div id="accountActions" style="display: none;">
+                <div class="drawer-section-title">My Access</div>
+                <div class="drawer-menu-list">
+                    <button class="drawer-item" onclick="toggleDrawer(); openCashInModal();">
+                        <svg viewBox="0 0 24 24"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5zm2.5-.5a.5.5 0 0 0 0 1H18a1 1 0 0 1 1 1v1H5V17.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5V9H5.5a.5.5 0 0 0 0-1H19V6.5a.5.5 0 0 0-.5-.5zM16 13h3v3h-3z"/></svg>
+                        Cash In Balance
+                        <span class="notification-badge" id="walletBalanceDisplay">₱0.00</span>
+                    </button>
+                    <button class="drawer-item" onclick="toggleDrawer(); openOrdersModal();">
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 14H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                        My VIP Keys & Orders
+                    </button>
+                    <button class="drawer-item" onclick="toggleDrawer(); openRedeemPage();">
+                        <svg viewBox="0 0 24 24"><path d="M20 7h-1.18A3 3 0 0 0 14 3.18 3 3 0 0 0 8.18 7H7a3 3 0 0 0-3 3v2h16v-2a3 3 0 0 0-3-3zm-6-1a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm-6 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm12 5H4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8z"/></svg>
+                        Redeem VIP Key
+                    </button>
+                    <button class="drawer-item" onclick="toggleDrawer(); openKeyHistory();">
+                        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>
+                        Revoked or Expired Keys
+                    </button>
+                    <button class="drawer-item" onclick="toggleDrawer(); openNotificationsModal();">
+                        <svg viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22zm7-6v-5a7 7 0 0 0-5.5-6.84V3a1.5 1.5 0 0 0-3 0v1.16A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2z"/></svg>
+                        Notifications
+                        <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="adminMenuBtn" style="display: none;">
+                <div class="drawer-section-title">Owner Controls</div>
+                <div class="drawer-menu-list">
+                    <button class="drawer-item" onclick="toggleDrawer(); openAdminPanel();" style="border-color: var(--accent-primary); background: rgba(255,42,75,0.1);">
+                        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.4 0 2.8 1.1 2.8 2.5V11c.6 0 1.2.6 1.2 1.2v3.6c0 .6-.6 1.2-1.2 1.2H9.2c-.6 0-1.2-.6-1.2-1.2v-3.6c0-.6.6-1.2 1.2-1.2v-1.5C9.2 8.1 10.6 7 12 7zm0 1.2c-.8 0-1.5.7-1.5 1.5v1.3h3V9.7c0-.8-.7-1.5-1.5-1.5z"/></svg>
+                        Admin Control Panel
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <div class="drawer-section-title">Quick Dashboard</div>
+                <div class="drawer-menu-list">
+                    <button class="drawer-item" onclick="toggleDrawer(); openAnnouncementsModal();">
+                        <svg viewBox="0 0 24 24"><path d="M18 3H6a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h2.59L12 21.41 15.41 18H18a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zm1 12a1 1 0 0 1-1 1h-3.41L12 18.59 9.41 16H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9zM7 8h10v2H7zm0 4h7v2H7z"/></svg>
+                        Announcement System
+                    </button>
+                    <button class="drawer-item" onclick="toggleDrawer(); openInfo();">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v0zm0-8h-2V7h2v2z"/></svg>
+                        About This Hub
+                    </button>
+                    <button class="drawer-item" onclick="toggleDrawer(); openTos();">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                        Terms &amp; Disclaimer
+                    </button>
+                    <button class="drawer-item" onclick="toggleDrawer(); openRedeemPage();">
+                        <svg viewBox="0 0 24 24"><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7M7 7a2.5 2.5 0 1 1 5 0H7zm10 0a2.5 2.5 0 1 0-5 0h5z"></path></svg>
+                        Redeem Key
+                    </button>
+                    <button class="drawer-item" onclick="openSavedProducts();">
+                        <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15-5-2.14L7 18V5h10v13z"/></svg>
+                        Saved Products
+                    </button>
+                    <a href="#statusTracker" class="drawer-item" onclick="toggleDrawer()">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        Product Status Tracker
+                    </a>
+                    <a href="#keyInput" class="drawer-item" onclick="toggleDrawer()">
+                        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                        Check VIP Key Status
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <div class="drawer-section-title">Support & Community</div>
+                <div class="drawer-menu-list">
+                    <button class="drawer-item" onclick="toggleSupportSubmenu()">
+                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                        Support Center
+                        <svg style="margin-left:auto; width:10px; height:10px;" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </button>
+                    
+                    <div class="support-submenu" id="supportSubmenu">
+                        <a href="https://t.me/GrandeeXM?text=Hello%20Granted%20Hub%20Support%2C%20I%20need%20assistance%20with%20my%20VIP%20Key." target="_blank" class="sub-drawer-item">
+                            <svg style="width:12px;height:12px;fill:var(--accent-primary);" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.06-.49-.83-.27-1.49-.42-1.43-.89.03-.25.38-.51 1.06-.78 4.16-1.82 6.94-3.02 8.34-3.61 3.97-1.66 4.79-1.95 5.33-1.96.12 0 .39.03.56.17.14.12.18.28.2.45-.02.07-.02.14-.04.2z"/></svg>
+                            Telegram Chat
+                        </a>
+                        <button class="sub-drawer-item" onclick="toggleDrawer(); toggleChatWindow();">
+                            <svg style="width:12px;height:12px;fill:var(--accent-primary);" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                            Web Live Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="saved-products-page" id="savedProductsPage" aria-hidden="true">
+        <div class="saved-products-container">
+            <div class="saved-products-header">
+                <div>
+                    <div class="saved-products-title">SAVED PRODUCTS</div>
+                    <div class="saved-products-subtitle">Your saved products are listed here.</div>
+                </div>
+                <button class="saved-page-close" type="button" aria-label="Close saved products" onclick="closeSavedProducts()">&times;</button>
+            </div>
+            <div class="saved-products-list" id="savedProductsList"></div>
+        </div>
+    </div>
+
+    <div class="saved-products-page" id="keyHistoryPage" aria-hidden="true">
+        <div class="saved-products-container">
+            <div class="saved-products-header">
+                <div>
+                    <div class="saved-products-title">REVOKED OR EXPIRED KEYS</div>
+                    <div class="saved-products-subtitle">Inactive key records are listed here. Usable key values are permanently removed.</div>
+                </div>
+                <button class="saved-page-close" type="button" aria-label="Close revoked or expired keys" onclick="closeKeyHistory()">&times;</button>
+            </div>
+            <div class="saved-products-list" id="keyHistoryList"></div>
+        </div>
+    </div>
+
+    <div class="redeem-page" id="redeemPage" aria-hidden="true">
+        <div class="redeem-loading" id="redeemLoading" hidden aria-live="assertive" aria-label="Verifying VIP key">
+            <div class="redeem-loading-panel">
+                <div class="redeem-loading-core" aria-hidden="true">
+                    <span class="redeem-loading-ring"></span>
+                    <span class="redeem-loading-ring"></span>
+                    <span class="redeem-loading-ring"></span>
+                    <span class="redeem-loading-key">&#128273;</span>
+                </div>
+                <div class="redeem-loading-kicker">GRANTED HUB // SECURE GATE</div>
+                <div class="redeem-loading-title">VERIFYING VIP KEY</div>
+                <div class="redeem-loading-status" id="redeemLoadingStatus">Decrypting your access record...</div>
+                <div class="redeem-loading-progress" aria-hidden="true"><span></span></div>
+                <div class="redeem-loading-meta">
+                    <span>ENCRYPTED CHECK</span>
+                    <span id="redeemLoadingCode">CHECK 01/03</span>
+                </div>
+            </div>
+        </div>
+        <div class="redeem-container">
+            <div class="redeem-header">
+                <div>
+                    <div class="redeem-kicker">GRANTED HUB ACCESS</div>
+                    <div class="redeem-page-title">REDEEM YOUR KEY HERE</div>
+                    <div class="redeem-page-subtitle">Enter your purchased VIP key to prepare your claim for admin.</div>
+                </div>
+                <button class="saved-page-close" type="button" aria-label="Close redeem page" onclick="closeRedeemPage()">&times;</button>
+            </div>
+
+            <div class="redeem-card">
+                <div class="redeem-step">
+                    <span class="redeem-step-number">01</span>
+                    <div>
+                        <div class="redeem-step-title">VERIFY YOUR VIP KEY</div>
+                        <div class="redeem-step-copy">Only active keys belonging to your logged-in account can be redeemed.</div>
+                    </div>
+                </div>
+                <div class="redeem-input-row">
+                    <input type="text" id="redeemKeyInput" class="redeem-key-input" placeholder="Enter VIP-XXXX-XXXXXXXXXX" autocomplete="off" onkeydown="handleRedeemKeyEnter(event)">
+                    <button class="redeem-submit-btn" type="button" onclick="submitRedeemKey()">REDEEM KEY</button>
+                </div>
+                <div id="redeemResult" class="redeem-result" aria-live="polite"></div>
+            </div>
+
+            <div class="redeem-claim-card" id="redeemClaimCard" hidden>
+                <div class="redeem-claim-topline">
+                    <span class="redeem-success-badge">KEY VERIFIED</span>
+                    <span class="redeem-claim-label">CLAIM DETAILS</span>
+                </div>
+                <div class="redeem-details-grid">
+                    <div class="redeem-detail">
+                        <span>CHEAT / PRODUCT</span>
+                        <strong id="redeemProductValue">—</strong>
+                    </div>
+                    <div class="redeem-detail">
+                        <span>DURATION</span>
+                        <strong id="redeemDurationValue">—</strong>
+                    </div>
+                    <div class="redeem-detail redeem-detail-wide">
+                        <span>VIP KEY</span>
+                        <strong id="redeemKeyValue">—</strong>
+                    </div>
+                </div>
+                <div class="redeem-telegram-box">
+                    <div class="redeem-telegram-title">CLAIM WITH ADMIN ON TELEGRAM</div>
+                    <p>The message below is generated from this exact purchase. It includes the correct product and duration.</p>
+                    <textarea id="redeemTelegramMessage" class="redeem-message-preview" readonly aria-label="Prefilled Telegram claim message"></textarea>
+                    <div class="redeem-claim-actions">
+                        <button class="redeem-copy-btn" type="button" onclick="copyRedeemMessage()">COPY MESSAGE</button>
+                        <a id="redeemTelegramLink" class="redeem-telegram-btn is-disabled" href="#" aria-disabled="true" target="_blank" rel="noopener noreferrer">CLAIM THIS PURCHASE ON TELEGRAM</a>
+                    </div>
+                    <div class="redeem-after-actions">
+                        <button class="redeem-after-btn primary" type="button" onclick="resetRedeemPage()">REDEEM AGAIN</button>
+                        <button class="redeem-after-btn" type="button" onclick="closeRedeemPage()">&#10005; CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="purchase-toast-stack" id="purchaseToastStack" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- ADMIN CONTROL PANEL MODAL -->
+    <div class="admin-modal-overlay" id="adminModalOverlay">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2>ADMIN CONTROL PANEL</h2>
+                <button class="drawer-close" onclick="closeAdminPanel()">&times;</button>
+            </div>
+            <div class="admin-body">
+
+                <div class="admin-section-box">
+                    <div class="admin-section-title">Announcement System — Owner/Admin Only</div>
+                    <p class="admin-form-note">
+                        Only the Owner/Admin can publish announcements. Every registered customer account will receive an unread notification when you publish.
+                    </p>
+                    <form id="adminAnnouncementForm" onsubmit="publishAnnouncement(event)">
+                        <div class="admin-form-grid">
+                            <label class="admin-field">
+                                <span>Announcement Category</span>
+                                <select id="adminAnnouncementCategory" class="admin-input" required>
+                                    <option value="new-product">New Product</option>
+                                    <option value="maintenance">Maintenance</option>
+                                    <option value="website-updates">Website Updates</option>
+                                    <option value="release-announcements">Release Announcements</option>
+                                </select>
+                            </label>
+                            <label class="admin-field">
+                                <span>Announcement Title</span>
+                                <input type="text" id="adminAnnouncementTitle" class="admin-input" placeholder="e.g. New product is now available" maxlength="80" required>
+                            </label>
+                            <label class="admin-field admin-field-wide">
+                                <span>Announcement Message</span>
+                                <textarea id="adminAnnouncementMessage" class="admin-input" placeholder="Write the update that account users should receive..." maxlength="500" required></textarea>
+                            </label>
+                        </div>
+                        <div class="admin-form-actions">
+                            <button type="submit" class="admin-submit-btn">PUBLISH ANNOUNCEMENT</button>
+                        </div>
+                    </form>
+                    <div id="adminAnnouncementsList" style="display:grid;gap:8px;margin-top:16px;"></div>
+                </div>
+
+                <div class="admin-section-box">
+                    <div class="admin-section-title">Add New Game / Cheat Product</div>
+                    <p class="admin-form-note">
+                        Add a new product to the public catalog. You may use direct Imgur links or gallery links with an image ID after the hash,
+                        such as <b style="color:#fff;">https://imgur.com/gallery/ALBUM_ID#IMAGE_ID</b>. Add as many access-day and price rows as needed.
+                        If the new category matches an existing one, it will automatically use the existing category.
+                    </p>
+                    <form id="addGameForm" onsubmit="addGameFromAdmin(event)">
+                        <div class="admin-form-grid">
+                            <label class="admin-field">
+                                <span>Game / Category</span>
+                                <select id="adminCategorySelect" class="admin-input" onchange="handleAdminCategoryChoice(this.value)" required>
+                                    <option value="__new__">+ ADD NEW CATEGORY</option>
+                                </select>
+                                <input type="text" id="adminCategoryCustom" class="admin-input admin-category-custom visible" placeholder="Type a new category, e.g. Valorant" maxlength="40" required>
+                            </label>
+                            <label class="admin-field">
+                                <span>Cheat / Product Name</span>
+                                <input type="text" id="adminCheatName" class="admin-input" placeholder="e.g. Nova Mod" maxlength="60" required>
+                            </label>
+                            <label class="admin-field admin-field-wide">
+                                <span>Imgur Logo URL</span>
+                                <input type="url" id="adminLogoUrl" class="admin-input" placeholder="https://imgur.com/gallery/album#image-id" required>
+                            </label>
+                            <label class="admin-field">
+                                <span>Proof URL 1</span>
+                                <input type="url" id="adminProofUrl1" class="admin-input" placeholder="https://imgur.com/gallery/album#proof-1" required>
+                            </label>
+                            <label class="admin-field">
+                                <span>Proof URL 2</span>
+                                <input type="url" id="adminProofUrl2" class="admin-input" placeholder="https://imgur.com/gallery/album#proof-2" required>
+                            </label>
+                            <label class="admin-field admin-field-wide">
+                                <span>Short Description</span>
+                                <textarea id="adminCardDescription" class="admin-input" placeholder="Text shown on the product card..." maxlength="240" required></textarea>
+                            </label>
+                            <label class="admin-field admin-field-wide">
+                                <span>About / Full Details</span>
+                                <textarea id="adminAbout" class="admin-input" placeholder="Full product information shown after clicking Details..." maxlength="3000" required></textarea>
+                            </label>
+                            <div class="admin-field admin-field-wide">
+                                <span>Price Menu — Access Days / Label + Price</span>
+                                <div class="admin-price-menu" id="adminPriceRows">
+                                    <div class="admin-price-row">
+                                        <label>
+                                            <span>Days / Label</span>
+                                            <input type="text" class="admin-input admin-plan-duration" placeholder="e.g. 1 Day or Lifetime" maxlength="30" required>
+                                        </label>
+                                        <label>
+                                            <span>Price (PHP)</span>
+                                            <input type="number" class="admin-input admin-plan-price" min="1" step="0.01" placeholder="100" required>
+                                        </label>
+                                        <button type="button" class="admin-remove-plan-btn" onclick="removeAdminPriceRow(this)" disabled>Remove</button>
+                                    </div>
+                                </div>
+                                <div class="admin-price-actions">
+                                    <button type="button" class="admin-add-plan-btn" onclick="addAdminPriceRow()">+ ADD DAYS / PRICE</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="admin-form-actions">
+                            <button type="button" id="cancelEditGameBtn" class="admin-cancel-btn" onclick="cancelEditGame()" style="display:none;">CANCEL EDIT</button>
+                            <button type="submit" id="adminSubmitGameBtn" class="admin-submit-btn">ADD GAME TO WEBSITE</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="admin-section-box">
+                    <div class="admin-section-title">Manage & Toggle Game Status (Safe / Updating / Maintenance)</div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Current Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductsTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="admin-section-box">
+                    <div class="admin-section-title">Registered Users Management — View & Change Passwords</div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Password</th>
+                                <th>New Password</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUsersTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="admin-section-box">
+                    <div class="admin-section-title">Live Chat Support Messages Inbox</div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Sender</th>
+                                <th>Message</th>
+                                <th>Time</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminChatInboxBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="admin-section-box">
+                    <div class="admin-section-title">Cash-In Verification Queue</div>
+                    <p style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">
+                        Review cash-in receipts and GCash details. Once approved, the amount will be added to the customer's wallet balance.
+                    </p>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Cash-In Amount</th>
+                                <th>Buyer GCash</th>
+                                <th>Receipt</th>
+                                <th>Submitted</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminPaymentRequestsTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="admin-section-box">
+                    <div class="admin-section-title">VIP Key Orders & Delivery Log</div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Product / Plan</th>
+                                <th>VIP Key</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrdersTableBody"></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div class="chat-title-info">
+                <span class="chat-status-dot"></span>
+                <span class="chat-title-text">GRANTED SUPPORT</span>
+            </div>
+            <button class="chat-close-btn" onclick="toggleChatWindow()">&times;</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-msg bot">Welcome to Granted Hub! How can we assist you with your VIP keys today?</div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+            <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo-box">
+            <img src="https://i.imgur.com/Np8qiGQ.png" alt="GRANTED HUB Logo" class="logo-img" id="app-logo">
+        </div>
+
+        <h1 class="brand-title">GRANTED HUB</h1>
+        <p class="brand-sub">Premium Gaming Tools &amp; VIP Access</p>
+
+        <a
+            class="telegram-group-btn"
+            href="https://t.me/GranTed013"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Join our Telegram group for more updates"
+        >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21.7 3.4 18.6 20c-.2 1.2-.9 1.5-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L6 13.7l-4.9-1.5c-1.1-.3-1.1-1.1.2-1.6L20.5 3c.9-.3 1.6.2 1.2.4Z"></path>
+            </svg>
+            JOIN OUR GROUP ON TELEGRAM FOR MORE UPDATES
+        </a>
+
+        <div class="header-btn-group">
+            <button class="info-trigger-btn" onclick="openAnnouncementsModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                    <path d="M10 21h4"></path>
+                </svg>
+                ANNOUNCEMENTS
+            </button>
+        </div>
+    </header>
+
+    <div id="announcementsModal" class="modal-overlay">
+        <div class="about-box announcement-box">
+            <button class="close-btn" onclick="closeAnnouncementsModal()">&times;</button>
+            <div class="about-title">ANNOUNCEMENT SYSTEM</div>
+            <p class="announcement-intro">
+                Stay updated with new products, maintenance notices, website changes, and release announcements from GRANTED HUB.
+            </p>
+
+            <div class="announcement-filter-list" role="tablist" aria-label="Announcement categories">
+                <button class="announcement-filter active" type="button" data-category="all" onclick="filterAnnouncements('all', this)" aria-selected="true">All Updates</button>
+                <button class="announcement-filter" type="button" data-category="new-product" onclick="filterAnnouncements('new-product', this)" aria-selected="false">New Product</button>
+                <button class="announcement-filter" type="button" data-category="maintenance" onclick="filterAnnouncements('maintenance', this)" aria-selected="false">Maintenance</button>
+                <button class="announcement-filter" type="button" data-category="website-updates" onclick="filterAnnouncements('website-updates', this)" aria-selected="false">Website Updates</button>
+                <button class="announcement-filter" type="button" data-category="release-announcements" onclick="filterAnnouncements('release-announcements', this)" aria-selected="false">Release Announcements</button>
+            </div>
+
+            <div class="announcement-list" id="announcementList">
+                <article class="announcement-card" data-category="release-announcements">
+                    <div class="announcement-card-topline">
+                        <span class="announcement-card-category">Release Announcements</span>
+                        <span class="announcement-card-date">Latest</span>
+                    </div>
+                    <div class="announcement-card-title">Announcement System is now live</div>
+                    <div class="announcement-card-message">All important GRANTED HUB updates are now organized here so you can find the latest information faster.</div>
+                </article>
+
+                <article class="announcement-card" data-category="new-product">
+                    <div class="announcement-card-topline">
+                        <span class="announcement-card-category">New Product</span>
+                        <span class="announcement-card-date">Coming soon</span>
+                    </div>
+                    <div class="announcement-card-title">New gaming tools and VIP access</div>
+                    <div class="announcement-card-message">New products will be posted in this section together with their features, access plans, and availability.</div>
+                </article>
+
+                <article class="announcement-card" data-category="maintenance">
+                    <div class="announcement-card-topline">
+                        <span class="announcement-card-category">Maintenance</span>
+                        <span class="announcement-card-date">As scheduled</span>
+                    </div>
+                    <div class="announcement-card-title">Planned maintenance notices</div>
+                    <div class="announcement-card-message">Check this category before purchasing whenever maintenance or temporary service interruptions are announced.</div>
+                </article>
+
+                <article class="announcement-card" data-category="website-updates">
+                    <div class="announcement-card-topline">
+                        <span class="announcement-card-category">Website Updates</span>
+                        <span class="announcement-card-date">Ongoing</span>
+                    </div>
+                    <div class="announcement-card-title">More improvements are on the way</div>
+                    <div class="announcement-card-message">Interface improvements, catalog changes, and new hub features will be listed here as they are added.</div>
+                </article>
+            </div>
+            <div class="announcement-empty" id="announcementEmpty">No announcements in this category yet.</div>
+        </div>
+    </div>
+
+    <div id="infoModal" class="modal-overlay">
+        <div class="about-box">
+            <button class="close-btn" onclick="closeInfo()">&times;</button>
+            <div class="about-title">GENERAL INFORMATION</div>
+            <p class="about-desc">
+                <b>GRANTED HUB</b> is a multi-game digital store featuring different mods, tools, and premium access keys for supported games. Browse each release to view its features, requirements, pricing, proofs, and current status.
+            </p>
+            <div class="highlights">
+                <div class="hl-item"><span class="hl-dot"></span> Multi-Game Mod Catalog</div>
+                <div class="hl-item"><span class="hl-dot"></span> Features, Proofs & Pricing</div>
+                <div class="hl-item"><span class="hl-dot"></span> VIP Customer Support</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="modal-overlay">
+        <div class="about-box tos-box">
+            <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+            <div class="about-title">VIP KEY CHECKOUT</div>
+            <p class="about-desc">Review the access details below. The purchase will be paid from your wallet balance.</p>
+            <div class="status-row">
+                <div class="status-game-info">
+                    <span class="legend-dot green"></span>
+                    <div>
+                        <div id="checkoutProductName" class="summary-game-name">Product</div>
+                        <div id="checkoutPlanName" style="font-size:11px; color:var(--text-muted);">Plan</div>
+                    </div>
+                </div>
+                <strong id="checkoutPrice" style="color:var(--accent-primary);">₱0</strong>
+            </div>
+            <div class="highlights" style="margin: 18px 0;">
+                <div class="hl-item"><span class="hl-dot"></span> Instant delivery after purchase</div>
+                <div class="hl-item"><span class="hl-dot"></span> Saved to your account</div>
+            </div>
+            <div class="wallet-checkout-box">
+                <div class="wallet-checkout-row">
+                    <span>Available wallet balance</span>
+                    <strong id="checkoutBalance">₱0.00</strong>
+                </div>
+                <div class="wallet-checkout-row">
+                    <span>Balance after purchase</span>
+                    <strong id="checkoutRemainingBalance">₱0.00</strong>
+                </div>
+                <p class="payment-method-note">Need more funds? Cash in at least ₱100 through the Cash In Balance option.</p>
+            </div>
+            <button class="auth-btn" id="submitPaymentButton" onclick="confirmCheckout()">PURCHASE WITH WALLET BALANCE</button>
+            <button class="secondary-action-btn" type="button" onclick="closeCheckoutModal(); openCashInModal();">CASH IN BALANCE</button>
+        </div>
+    </div>
+
+    <div id="cashInModal" class="modal-overlay">
+        <div class="about-box tos-box">
+            <button class="close-btn" onclick="closeCashInModal()">&times;</button>
+            <div class="about-title">CASH IN BALANCE</div>
+            <p class="about-desc">Add funds to your wallet before purchasing VIP access. The minimum cash-in amount is ₱100.</p>
+            <div class="wallet-current-balance">
+                <span>Current wallet balance</span>
+                <strong id="cashInCurrentBalance">₱0.00</strong>
+            </div>
+            <div class="payment-method-section">
+                <span class="payment-method-label">Choose payment method</span>
+                <div class="payment-methods">
+                    <button
+                        type="button"
+                        class="payment-method"
+                        id="gcashPaymentMethod"
+                        aria-pressed="false"
+                        onclick="selectCashInPaymentMethod('gcash')"
+                    >
+                        <img
+                            class="payment-method-logo"
+                            src="https://i.imgur.com/I750S9Zh.jpg"
+                            alt="GCash logo"
+                        >
+                        <span class="payment-method-details">
+                            <span class="payment-method-name">GCash</span>
+                            <span class="payment-method-status">Click to show QR code</span>
+                        </span>
+                    </button>
+                    <button
+                        type="button"
+                        class="payment-method unavailable"
+                        disabled
+                        aria-disabled="true"
+                    >
+                        <img
+                            class="payment-method-logo"
+                            src="https://i.imgur.com/TB9FAqeh.jpg"
+                            alt="Maya logo"
+                        >
+                        <span class="payment-method-details">
+                            <span class="payment-method-name">Maya</span>
+                            <span class="payment-method-status">Unavailable</span>
+                        </span>
+                    </button>
+                </div>
+                <div class="gcash-payment-details" id="gcashPaymentDetails">
+                    <div class="gcash-qr-title">SCAN TO PAY WITH GCASH</div>
+                    <p class="gcash-qr-instruction">Open your GCash app, scan this QR code, then upload your payment receipt below.</p>
+                    <img
+                        class="gcash-qr-image"
+                        src="https://i.imgur.com/ZjIVgHGh.jpg"
+                        alt="GCash payment QR code"
+                        onclick="window.open(this.src, '_blank', 'noopener,noreferrer')"
+                    >
+                </div>
+            </div>
+            <div class="payment-proof-fields">
+                <div class="payment-proof-field">
+                    <label for="cashInAmount">Cash-In Amount</label>
+                    <input type="number" id="cashInAmount" class="payment-proof-input" min="100" step="1" placeholder="Minimum ₱100" inputmode="decimal">
+                    <span class="payment-proof-hint">Enter an amount of at least ₱100. The balance will be added after admin verification.</span>
+                </div>
+                <div class="payment-proof-field">
+                    <label for="cashInGcashNumber">Your GCash Number</label>
+                    <input type="tel" id="cashInGcashNumber" class="payment-proof-input" inputmode="numeric" placeholder="09XXXXXXXXX" maxlength="13" autocomplete="tel">
+                    <span class="payment-proof-hint">Enter the GCash number used for this cash-in.</span>
+                </div>
+                <div class="payment-proof-field">
+                    <label for="cashInReceiptInput">Cash-In Receipt / Screenshot</label>
+                    <input type="file" id="cashInReceiptInput" class="payment-proof-input" accept="image/png,image/jpeg,image/webp">
+                    <span class="payment-proof-hint">Image files only, up to 2 MB. An administrator will review the receipt before adding the funds.</span>
+                    <img id="cashInReceiptPreview" class="receipt-preview" alt="Cash-in receipt preview">
+                </div>
+            </div>
+            <button class="auth-btn" id="submitCashInButton" onclick="submitCashIn()">SUBMIT CASH-IN FOR REVIEW</button>
+        </div>
+    </div>
+
+    <div id="ordersModal" class="modal-overlay">
+        <div class="about-box tos-box">
+            <button class="close-btn" onclick="closeOrdersModal()">&times;</button>
+            <div class="about-title">MY VIP KEYS & ORDERS</div>
+            <p class="about-desc">Your generated keys are stored locally in this browser and remain available on this device.</p>
+            <div id="ordersSummary" class="highlights" style="margin-bottom: 18px;"></div>
+            <div id="ordersList"></div>
+        </div>
+    </div>
+
+    <div id="notificationsModal" class="modal-overlay">
+        <div class="about-box tos-box">
+            <button class="close-btn" onclick="closeNotificationsModal()">&times;</button>
+            <div class="about-title">NOTIFICATIONS</div>
+            <p class="about-desc">Payment updates and VIP key approval notices for this account.</p>
+            <div id="notificationsList" style="display:grid; gap:10px;"></div>
+        </div>
+    </div>
+
+    <div id="tosModal" class="modal-overlay">
+        <div class="about-box tos-box">
+            <button class="close-btn" onclick="closeTos()">&times;</button>
+            <div class="about-title" style="text-align: center;">TERMS OF SERVICE & DISCLAIMER</div>
+            
+            <div class="tos-warning-banner">
+                <div>
+                    <b>USE AT YOUR OWN RISK NOTICE</b><br>
+                    Granted Hub provides software and VIP tools for supported games. You assume full responsibility for their use.
+                </div>
+            </div>
+
+            <div class="tos-section-title">1. Account Safety & Protection Disclaimer</div>
+            <p class="about-desc" style="margin-bottom: 10px;">
+                While Granted Hub provides tools equipped with modern bypass technologies and anti-cheat protection, no third-party game modification is 100% immune to game updates or anti-cheat detections. <b>Granted Hub is not responsible for any account bans, suspensions, rank resets, or lost game items</b> resulting from the use or misuse of our products.
+            </p>
+
+            <div class="tos-section-title">2. Customer Responsibility</div>
+            <ul class="tos-list">
+                <li>Users are advised to test tools on guest or secondary accounts before applying them to main accounts.</li>
+                <li>Users must adhere to safe gameplay habits (avoiding obvious rage hacking or unnatural kill streaks) to maintain account safety.</li>
+                <li>Always verify that the tool status is marked as <b>UNDETECTED</b> on our status board before launching your game.</li>
+            </ul>
+
+            <div class="tos-section-title">3. Digital Purchase & Refund Policy</div>
+            <p class="about-desc" style="margin-bottom: 16px;">
+                Due to the nature of digital license keys and instant key delivery, <b>all sales are strictly final and non-refundable</b> once a key has been generated or delivered.
+            </p>
+
+            <div class="highlights">
+                <div class="hl-item"><span class="hl-dot"></span> Use At Own Risk</div>
+                <div class="hl-item"><span class="hl-dot"></span> No Ban Guarantee</div>
+                <div class="hl-item"><span class="hl-dot"></span> Final Sale Policy</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div class="search-wrapper">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search products..." onkeyup="filterProducts()">
+    </div>
+
+    <!-- CATEGORY FILTERS -->
+    <div class="filter-container" id="categoryFilterContainer"></div>
+
+    <section class="game-showcase-section" aria-label="Live game screen showcase">
+        <div class="game-showcase-heading">
+            <div class="game-showcase-title">LIVE GAME SHOWCASE</div>
+            <div class="game-showcase-caption">AUTO-SCROLLING SCREEN PROOFS // HOVER TO PAUSE</div>
+        </div>
+        <div class="game-showcase-viewport">
+            <div class="game-showcase-track">
+                <article class="game-showcase-card">
+                    <img src="https://i.imgur.com/TFqW4Jrh.jpg" alt="Mobile Legends game screen proof 1">
+                </article>
+                <article class="game-showcase-card">
+                    <img src="https://i.imgur.com/S73EURfh.jpg" alt="Mobile Legends game screen proof 2">
+                </article>
+                <article class="game-showcase-card">
+                    <img src="https://i.imgur.com/nQBrrCJh.jpg" alt="Call of Duty Mobile game screen proof 1">
+                </article>
+                <article class="game-showcase-card">
+                    <img src="https://i.imgur.com/edplHtIh.jpg" alt="Call of Duty Mobile game screen proof 2">
+                </article>
+                <article class="game-showcase-card" aria-hidden="true">
+                    <img src="https://i.imgur.com/TFqW4Jrh.jpg" alt="">
+                </article>
+                <article class="game-showcase-card" aria-hidden="true">
+                    <img src="https://i.imgur.com/S73EURfh.jpg" alt="">
+                </article>
+                <article class="game-showcase-card" aria-hidden="true">
+                    <img src="https://i.imgur.com/nQBrrCJh.jpg" alt="">
+                </article>
+                <article class="game-showcase-card" aria-hidden="true">
+                    <img src="https://i.imgur.com/edplHtIh.jpg" alt="">
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTS GRID -->
+    <div class="products-grid" id="productsGrid">
+        <div class="no-games-box" id="noGamesNotice" style="display: none;">
+            <div class="no-games-title">NO PRODUCTS AVAILABLE</div>
+            <div class="no-games-desc">No products are currently available. Please check back later for updates.</div>
+        </div>
+    </div>
+
+    <!-- LIVE PRODUCT STATUS TRACKER SECTION -->
+    <div class="status-tracker-section" id="statusTracker">
+        <div class="status-header">
+            <div class="status-header-title">
+                <svg style="width:18px;height:18px;fill:var(--accent-primary);" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                SYSTEM STATUS DASHBOARD
+            </div>
+            <div class="status-legend">
+                <span class="legend-item"><span class="legend-dot green"></span> Safe</span>
+                <span class="legend-item"><span class="legend-dot yellow"></span> Updating</span>
+                <span class="legend-item"><span class="legend-dot maintenance"></span> Maintenance</span>
+            </div>
+        </div>
+
+        <div class="status-table-list" id="statusTableListContainer">
+            <div class="status-row">
+                <div class="status-game-info">
+                    <span class="summary-game-name" style="color: var(--text-muted); font-style: italic;">No active systems currently running.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIP KEY CHECKER SECTION -->
+    <div class="checker-section">
+        <div class="checker-title">
+            <svg style="width:16px;height:16px;fill:var(--accent-primary);" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+            Check VIP Key Status
+        </div>
+        <p class="checker-desc">Enter your active VIP key below to check its expiration status and validity details.</p>
+        <div class="checker-form">
+            <input type="text" id="keyInput" class="checker-input" placeholder="Enter VIP Key (e.g. VIP-ML-XXXX)">
+            <button class="checker-btn" onclick="checkKeyStatus()">CHECK STATUS</button>
+        </div>
+        <div id="checkerResult" class="checker-result"></div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <div class="faq-section">
+        <h2 class="faq-header-title">Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>How will I receive my VIP Key after payment?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Key delivery is automatic once your payment is verified. You will immediately see your activation token or download link on the screen.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>Is this safe for my main account or is there a risk of being banned?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Tools may be affected by game updates and anti-cheat systems, and no product can guarantee account protection. Please refer to our Disclaimer & Terms of Service for safe usage guidelines.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>How do I install or start using the tool?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    All purchased subscription keys include a guide and step-by-step instructions on how to easily install and set it up.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>Who can I contact if I encounter a problem or error?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    You can contact our official administrative support team directly by clicking Support Center inside the menu.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
